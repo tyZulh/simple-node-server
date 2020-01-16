@@ -6,13 +6,19 @@ const connection = require('../conf')
 const router = express.Router()
 
 router.post('/', (req,res)=>{
+  const emailRegEx= /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
+  
+  if(!emailRegEx.test(req.body.email)){
+    return res.status(401).send('Unauthorized user')
+  }
+
   const user ={
-    firstname : req.body.firstname,
-    prefix : req.body.prefix, 
+    name : req.body.name,
+    lastName : req.body.lastName,
     email : req.body.email,
-    speciality_id : req.body.speciality_id,
     password : bcrypt.hashSync(req.body.password)
   }
+  
 
   connection.query(`SELECT id FROM person WHERE email = ?`, user.email, (err,result) =>{
     if(err) {
@@ -28,7 +34,7 @@ router.post('/', (req,res)=>{
         return res.status(500).send('Cannot register the user')
       }
 
-      connection.query(`SELECT * FROM person WHERE id =?`, result.insertId, (err, result) =>{
+      connection.query(`SELECT id, name, lastname, email FROM person WHERE id =?`, result.insertId, (err, result) =>{
         if(err) {
           return res.status(500).send('Internal server error')
         }

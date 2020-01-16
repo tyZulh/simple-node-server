@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const connection = require('./conf')
 const routes = require('./routes/index')
@@ -7,11 +8,12 @@ const routes = require('./routes/index')
 const app = express();
 const port = 4000
 
+app.use(cors())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-app.use('/person', routes.Person)
-app.use('/speciality', routes.Speciality)
+app.use('/auth', routes.Authentication)
+app.use('/register', routes.Register)
 
 
 app.get('/', (req, res,) => {

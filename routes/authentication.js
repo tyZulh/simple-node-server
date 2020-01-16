@@ -11,7 +11,14 @@ require('dotenv').config(process.cwd(), '../.env')
 const secret = process.env.JWT_SECRET
 
 router.post('/', (req, res)=>{
-  const email = req.body.email
+ 
+  const emailRegEx= /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
+  
+  if(!emailRegEx.test(req.body.login)){
+    return res.status(401).send('Unauthorized user')
+  }
+
+  const email = req.body.login
   const password = req.body.password
 
   connection.query(`SELECT * FROM person WHERE email = ?`, email, (err, result)=>{
