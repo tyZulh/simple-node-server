@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS `person`;
-DROP TABLE IF EXISTS `speciality`;
 
 CREATE TABLE `person` (
   `id` int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
